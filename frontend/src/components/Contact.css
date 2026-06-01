@@ -1,0 +1,300 @@
+.contact-section {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.95fr) minmax(320px, 0.82fr);
+  align-items: center;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: 5.5rem clamp(1.25rem, 5vw, 4.5rem) 3rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 63% 6%, rgba(123, 108, 255, 0.28), transparent 22rem),
+    radial-gradient(circle at 28% 22%, rgba(230, 59, 191, 0.12), transparent 19rem),
+    linear-gradient(120deg, #061623 0%, #071b26 48%, #071421 100%);
+}
+
+.contact-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 0%, rgba(25, 230, 223, 0.12) 48%, transparent 64%),
+    linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 100% 100%, 46px 46px, 46px 46px;
+  mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent);
+  pointer-events: none;
+}
+
+.contact-info,
+.contact-form {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-info {
+  opacity: 1;
+  transform: translateX(0);
+  animation: contactLeftIn 0.85s ease both;
+}
+
+.contact-section.is-visible .contact-info {
+  animation: contactLeftIn 0.85s ease both;
+}
+
+.contact-section.is-visible .contact-form {
+  animation: contactRightIn 0.85s ease 0.12s both;
+}
+
+.contact-info h2 {
+  color: #ffffff;
+  font-size: var(--font-heading-lg);
+
+  line-height: 1;
+  margin-bottom: 0.85rem;
+}
+
+.contact-info h2 span {
+  color: #19e6df;
+  filter: drop-shadow(0 0 14px rgba(25, 230, 223, 0.46));
+}
+
+.contact-info h3 {
+  color: #f4fbff;
+  font-size: var(--font-heading-sm);
+
+  margin-bottom: 0.9rem;
+}
+
+.contact-info p {
+  max-width: 650px;
+  color: #c6d5dd;
+  font-size: var(--font-body);
+  font-weight: 600;
+  line-height: 1.64;
+  margin-bottom: 1.55rem;
+}
+
+.contact-lines {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 2.4rem;
+}
+
+.contact-lines a {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #e8eef7;
+  font-weight: 700;
+  font-size: var(--font-body);
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.contact-lines a:hover {
+  color: #19e6df;
+  transform: translateX(4px);
+}
+
+.contact-lines svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  fill: #19e6df;
+  flex: 0 0 auto;
+}
+
+.contact-social {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.contact-social a {
+  width: 2.65rem;
+  aspect-ratio: 1;
+  display: inline-grid;
+  place-items: center;
+  border: 2px solid rgba(25, 230, 223, 0.82);
+  border-radius: 50%;
+  color: #19e6df;
+  box-shadow: 0 0 12px rgba(25, 230, 223, 0.18);
+  transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact-social svg {
+  width: 1.13rem;
+  height: 1.13rem;
+  fill: currentColor;
+}
+
+.contact-social a:hover,
+.contact-social a:focus-visible {
+  transform: translateY(-5px) scale(1.06);
+  background: #19e6df;
+  color: #061623;
+  box-shadow: 0 0 24px rgba(25, 230, 223, 0.72);
+  outline: none;
+}
+
+.contact-form {
+  width: min(100%, 430px);
+  display: grid;
+  gap: 0.62rem;
+  justify-self: start;
+  padding: clamp(1rem, 2.4vw, 1.45rem);
+  border: 1px solid rgba(25, 230, 223, 0.14);
+  border-radius: 0.55rem;
+  background: rgba(6, 20, 34, 0.58);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  transform: translateX(0);
+  animation: contactRightIn 0.85s ease 0.12s both;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.38rem;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 650;
+  outline: none;
+  transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact-form input {
+  min-height: 2.5rem;
+  padding: 0.62rem 0.78rem;
+}
+
+.contact-form textarea {
+  min-height: 6.75rem;
+  padding: 0.72rem 0.78rem;
+  resize: vertical;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: rgba(218, 232, 239, 0.62);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #19e6df;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 2px rgba(25, 230, 223, 0.14);
+}
+
+.contact-form button {
+  min-height: 2.45rem;
+  border: 0;
+  border-radius: 999px;
+  margin-top: 0.45rem;
+  background: #19e6df;
+  color: #07303a;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow:
+    0 0 14px rgba(25, 230, 223, 0.7),
+    0 0 26px rgba(25, 230, 223, 0.24);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.contact-form button:hover,
+.contact-form button:focus-visible {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 18px rgba(25, 230, 223, 0.9),
+    0 0 36px rgba(25, 230, 223, 0.38);
+  outline: none;
+}
+
+.contact-status {
+  color: #c6d5dd;
+  font-weight: 700;
+  font-size: var(--font-small);
+  text-align: center;
+}
+
+@keyframes contactLeftIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes contactRightIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 920px) {
+  .contact-section {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .contact-form {
+    justify-self: center;
+  }
+
+  .contact-info p,
+  .contact-lines a {
+    margin-inline: auto;
+  }
+
+  .contact-social {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .contact-section {
+    padding: 5rem 1rem 3rem;
+    gap: 1.8rem;
+  }
+
+  .contact-info p {
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+
+  .contact-form {
+    width: 100%;
+    padding: 0.95rem;
+  }
+
+  .contact-lines {
+    gap: 0.6rem;
+    margin-bottom: 1.45rem;
+  }
+
+  .contact-lines a {
+    max-width: 100%;
+    font-size: 0.84rem;
+  }
+
+  .contact-social a {
+    width: 2.25rem;
+  }
+
+  .contact-form textarea {
+    min-height: 6.5rem;
+  }
+}
