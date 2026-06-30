@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://mohan-portfolio-pcwx.onrender.com/api';
+export const API_BASE_URL ='https://mohan-portfolio-pcwx.onrender.com/api' || import.meta.env.VITE_API_URL;
 export const ADMIN_TOKEN_KEY = 'portfolio_admin_token';
 
 const api = axios.create({
