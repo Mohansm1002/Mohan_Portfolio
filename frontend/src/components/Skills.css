@@ -33,11 +33,11 @@
   text-align: center;
   color: #ffffff;
   font-size: var(--font-heading-lg);
-
   line-height: 1;
   margin-bottom: clamp(2.4rem, 6vh, 4rem);
   opacity: 1;
   transform: none;
+  --reveal-delay: 0s;
 }
 
 .skills-title span {
@@ -72,7 +72,6 @@
   display: inline-block;
   color: #f4fbff;
   font-size: var(--font-heading-sm);
-
   line-height: 1.2;
   margin-bottom: 2.3rem;
   border-bottom: 4px solid rgba(255, 255, 255, 0.9);
@@ -90,6 +89,8 @@
   grid-template-columns: auto 1fr;
   gap: 0.35rem 0.7rem;
   align-items: center;
+  --reveal-delay: calc(0.18s + (var(--skill-index) * 0.075s));
+  transition: transform 0.28s ease, filter 0.28s ease;
 }
 
 .skill-icon {
@@ -109,6 +110,7 @@
   line-height: 1;
   text-transform: uppercase;
   box-shadow: 0 0 16px rgba(25, 230, 223, 0.28);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
 }
 
 .skill-icon[data-icon="Java"],
@@ -175,11 +177,31 @@
 }
 
 .skill-fill {
-  width: var(--level);
+  width: var(--animated-level, 0%);
   height: 100%;
   border-radius: inherit;
   background: #19e6df;
   box-shadow: 0 0 14px rgba(25, 230, 223, 0.72);
+  transform-origin: left center;
+  transition: width 0.08s linear, box-shadow 0.28s ease;
+}
+
+.skills-section:not(.skills-animated) .skill-fill {
+  width: 0;
+}
+
+.skills-section.is-visible .tech-skill:hover {
+  transform: translateX(0.35rem);
+  filter: brightness(1.08);
+}
+
+.skills-section.is-visible .tech-skill:hover .skill-icon {
+  transform: scale(1.07);
+  box-shadow: 0 0 22px rgba(25, 230, 223, 0.42);
+}
+
+.skills-section.is-visible .tech-skill:hover .skill-fill {
+  box-shadow: 0 0 20px rgba(25, 230, 223, 0.9);
 }
 
 .circle-grid {
@@ -192,6 +214,8 @@
   display: grid;
   justify-items: center;
   gap: 0.8rem;
+  --reveal-delay: calc(0.24s + (var(--skill-index) * 0.09s));
+  transition: transform 0.28s ease, filter 0.28s ease;
 }
 
 .circle-progress {
@@ -202,8 +226,9 @@
   border-radius: 50%;
   background:
     radial-gradient(circle closest-side, #071827 72%, transparent 73%),
-    conic-gradient(#19e6df var(--level), #071827 0deg);
+    conic-gradient(#19e6df var(--level, 0deg), #071827 0deg);
   box-shadow: 0 0 22px rgba(25, 230, 223, 0.18);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.08s linear;
 }
 
 .circle-progress span {
@@ -217,6 +242,18 @@
   font-weight: 800;
   font-size: var(--font-body);
   text-align: center;
+}
+
+.skills-section.is-visible .circle-skill:hover {
+  transform: translateY(-0.38rem);
+  filter: brightness(1.08);
+}
+
+.skills-section.is-visible .circle-skill:hover .circle-progress {
+  transform: scale(1.05);
+  box-shadow:
+    0 0 26px rgba(25, 230, 223, 0.36),
+    0 0 36px rgba(230, 59, 191, 0.16);
 }
 
 @keyframes skillRevealUp {
@@ -309,5 +346,26 @@
 
   .circle-skill p {
     font-size: 0.82rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech-skill,
+  .skill-icon,
+  .skill-fill,
+  .circle-skill,
+  .circle-progress {
+    transition: none;
+  }
+
+  .skill-fill {
+    width: var(--level);
+  }
+
+  .skills-section.is-visible .tech-skill:hover,
+  .skills-section.is-visible .tech-skill:hover .skill-icon,
+  .skills-section.is-visible .circle-skill:hover,
+  .skills-section.is-visible .circle-skill:hover .circle-progress {
+    transform: none;
   }
 }

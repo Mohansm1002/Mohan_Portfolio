@@ -1,91 +1,54 @@
 import { useEffect, useState } from 'react';
-import cssLogo from '../assets/CSS3_logo.png';
-import foodDeliveryImage from '../assets/food_delivery.png';
-import htmlLogo from '../assets/HTML5-logo.png';
-import javaLogo from '../assets/java-logo.svg';
-import laptopPriceImage from '../assets/laptop_price.png';
-import mlLogo from '../assets/ML2_logo.png';
-import pythonLogo from '../assets/Python-logo.png';
-import reactLogo from '../assets/React-logo.png';
-import sqlLogo from '../assets/Sql_logo.png';
-import trainTicketImage from '../assets/train_ticket.png';
+import { getProjects } from '../api/portfolioApi.js';
+import { defaultProjects, resolveImage } from '../portfolio/defaultData.js';
 import './Projects.css';
-
-const projects = [
-  {
-    title: 'Food Delivery Application',
-    stack: 'HTML, CSS, React.js',
-    technologies: [
-      { name: 'HTML', image: htmlLogo, className: 'html' },
-      { name: 'CSS', image: cssLogo, className: 'css' },
-      { name: 'React.js', image: reactLogo, className: 'react' },
-    ],
-    type: 'Frontend application',
-    accent: 'food',
-    image: foodDeliveryImage,
-    description:
-      'A responsive food delivery web application for browsing menus and placing orders with a smooth customer experience.',
-    highlights: [
-      'Designed user-friendly restaurant and menu screens with HTML and CSS.',
-      'Built cart update flows for real-time item changes.',
-      'Structured the React interface for scalable, reusable components.',
-    ],
-  },
-  {
-    title: 'Train Ticket Booking System',
-    stack: 'Java',
-    technologies: [
-      { name: 'Java', image: javaLogo, className: 'java' },
-    ],
-    type: 'Booking system',
-    accent: 'train',
-    image: trainTicketImage,
-    description:
-      'A console-based ticket booking system for reserving and managing train tickets with clear object-oriented structure.',
-    highlights: [
-      'Implemented user input handling, seat availability checks, booking, and cancellation.',
-      'Applied object-oriented programming concepts for maintainable logic.',
-      'Organized the flow to make ticket management simple and reliable.',
-    ],
-  },
-  {
-    title: 'Laptop Price Prediction',
-    stack: 'Python, Machine Learning',
-    technologies: [
-      { name: 'Python', image: pythonLogo, className: 'python' },
-      { name: 'Machine Learning', image: mlLogo, className: 'ml' },
-    ],
-    type: 'Prediction model',
-    accent: 'laptop',
-    image: laptopPriceImage,
-    description:
-      'A machine learning application that predicts laptop prices from specifications and presents results through an interactive UI.',
-    highlights: [
-      'Trained a Random Forest model for improved price prediction accuracy.',
-      'Prepared specification-based inputs for real-time predictions.',
-      'Built a user-friendly interface for quick laptop price estimation.',
-    ],
-  },
-];
 
 const Projects = () => {
   const [activeProject, setActiveProject] = useState(null);
+  const [projects, setProjects] = useState([]);
+  const [projectsStatus, setProjectsStatus] = useState('Loading projects...');
 
   const renderTechStack = (technologies) => (
     <div className="project-tech-stack">
-      {technologies.map((tech) => (
+      {(technologies || []).map((tech) => (
         <span className="project-tech-chip" key={tech.name}>
           <span
             className={`project-tech-icon project-tech-icon-${tech.className}`}
             aria-hidden="true"
           >
-            {tech.image ? <img src={tech.image} alt="" /> : tech.icon}
+            {resolveImage(tech) ? <img src={resolveImage(tech)} alt="" /> : tech.name}
           </span>
           {tech.name}
         </span>
       ))}
     </div>
   );
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getProjects()
+      .then((data) => {
+        if (!isMounted) {
+          return;
+        }
+
+        setProjects(data.length ? data : defaultProjects);
+        setProjectsStatus('');
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setProjects(defaultProjects);
+        setProjectsStatus('Projects API unavailable. Showing saved fallback content.');
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!activeProject) {
@@ -113,6 +76,7 @@ const Projects = () => {
         
         <h2>My <span>Projects</span></h2>
       </div>
+      {projectsStatus && <p className="portfolio-data-status">{projectsStatus}</p>}
 
       <div className="project-list">
         {projects.map((project, index) => (
@@ -124,7 +88,7 @@ const Projects = () => {
             type="button"
           >
             <div className="project-preview" aria-hidden="true">
-              <img src={project.image} alt="" />
+              <img src={resolveImage(project)} alt="" />
             </div>
             <div className="project-info">
               <p>{project.type}</p>
@@ -158,7 +122,7 @@ const Projects = () => {
               <span className="detail-glow" />
               <img
                 className="detail-screen"
-                src={activeProject.image}
+                src={resolveImage(activeProject)}
                 alt=""
               />
               <span className="detail-pill detail-pill-one" />
@@ -171,7 +135,7 @@ const Projects = () => {
               <p className="project-detail-description">{activeProject.description}</p>
               {renderTechStack(activeProject.technologies)}
               <ul>
-                {activeProject.highlights.map((highlight) => (
+                {(activeProject.highlights || []).map((highlight) => (
                   <li key={highlight}>{highlight}</li>
                 ))}
               </ul>

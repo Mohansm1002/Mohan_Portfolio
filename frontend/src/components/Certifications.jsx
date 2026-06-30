@@ -1,47 +1,7 @@
-import { useState } from 'react';
-import javaCertificate from '../assets/java_c.png';
-import nptelCertificate from '../assets/nptel_pyt_cer.png';
-import pythonCertificate from '../assets/python_c.png';
+import { useEffect, useState } from 'react';
+import { getCertifications } from '../api/portfolioApi.js';
+import { defaultCertifications, resolveImage } from '../portfolio/defaultData.js';
 import './Certifications.css';
-
-const certifications = [
-  {
-    title: 'The Joy of Computing Using Python',
-    issuer: 'NPTEL (IIT Madras)',
-    date: 'Jul - Oct 2024',
-    score: '53%',
-    duration: '12 Weeks',
-    roll: 'NPTEL24CS113S853000629',
-    credits: '3 or 4',
-    image: nptelCertificate,
-    description:
-      'Learned Python programming fundamentals, data structures, problem solving and real-world applications.',
-  },
-  {
-    title: "Cybernaut's Tech Trio Course on Java",
-    issuer: 'Cybernaut Edu-Tech LLP',
-    date: '25 Sep 2024',
-    score: '85%',
-    duration: 'Self-paced',
-    roll: 'CYB-JAVA-2024',
-    credits: 'Verified',
-    image: javaCertificate,
-    description:
-      'Completed comprehensive Java course covering OOP, Collections, Exception Handling, and core Java concepts.',
-  },
-  {
-    title: "Cybernaut's Tech Trio Course on Python",
-    issuer: 'Cybernaut Edu-Tech LLP',
-    date: '14 Nov 2024',
-    score: '88%',
-    duration: 'Self-paced',
-    roll: 'CYB-PY-2024',
-    credits: 'Verified',
-    image: pythonCertificate,
-    description:
-      'Completed comprehensive Python course covering data structures, problem solving and Python programming fundamentals.',
-  },
-];
 
 const AwardIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -75,12 +35,42 @@ const EyeIcon = () => (
 
 const Certifications = () => {
   const [activeCertificate, setActiveCertificate] = useState(null);
+  const [certifications, setCertifications] = useState([]);
+  const [certificationsStatus, setCertificationsStatus] = useState('Loading certifications...');
   const [zoom, setZoom] = useState(100);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    getCertifications()
+      .then((data) => {
+        if (!isMounted) {
+          return;
+        }
+
+        setCertifications(data.length ? data : defaultCertifications);
+        setCertificationsStatus('');
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setCertifications(defaultCertifications);
+        setCertificationsStatus('Certifications API unavailable. Showing saved fallback content.');
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const openCertificate = (certificate) => {
     setActiveCertificate(certificate);
     setZoom(100);
   };
+  const latestCertificationYear =
+    certifications.find((certificate) => certificate.date?.match(/\d{4}/))?.date.match(/\d{4}/)?.[0] || '2024';
 
   if (activeCertificate) {
     return (
@@ -107,7 +97,7 @@ const Certifications = () => {
               <div><dt>Credits Recommended</dt><dd>{activeCertificate.credits}</dd></div>
             </dl>
 
-            <a className="download-button" href={activeCertificate.image} download>
+            <a className="download-button" href={resolveImage(activeCertificate)} download>
               Download Certificate
             </a>
           </aside>
@@ -125,13 +115,13 @@ const Certifications = () => {
               <button type="button" onClick={() => setZoom((value) => Math.max(70, value - 10))}>− Zoom Out</button>
               <span>{zoom}%</span>
               <button type="button" onClick={() => setZoom((value) => Math.min(130, value + 10))}>+ Zoom In</button>
-              <a href={activeCertificate.image} target="_blank" rel="noreferrer">Full Screen</a>
+              <a href={resolveImage(activeCertificate)} target="_blank" rel="noreferrer">Full Screen</a>
             </div>
           </header>
 
           <div className="certificate-image-stage">
             <img
-              src={activeCertificate.image}
+              src={resolveImage(activeCertificate)}
               alt={`${activeCertificate.title} certificate`}
               style={{ width: `${zoom}%` }}
             />
@@ -139,8 +129,8 @@ const Certifications = () => {
 
           <div className="preview-bottom-actions">
             <button type="button">Share</button>
-            <a href={activeCertificate.image} target="_blank" rel="noreferrer">Open in new tab</a>
-            <a href={activeCertificate.image} download>Download PDF</a>
+            <a href={resolveImage(activeCertificate)} target="_blank" rel="noreferrer">Open in new tab</a>
+            <a href={resolveImage(activeCertificate)} download>Download PDF</a>
             <button type="button">Verify Certificate</button>
           </div>
         </div>
@@ -155,10 +145,11 @@ const Certifications = () => {
         <h2>Certifications & <span>Achievements</span></h2>
         <p>A collection of my professional certifications and achievements that validate my skills and knowledge.</p>
       </div>
+      {certificationsStatus && <p className="portfolio-data-status">{certificationsStatus}</p>}
 
       <div className="cert-stats">
-        <div><TrophyIcon /><strong>3+</strong><span>Certifications</span></div>
-        <div><CalendarIcon /><strong>2024</strong><span>Latest Certification</span></div>
+        <div><TrophyIcon /><strong>{certifications.length}+</strong><span>Certifications</span></div>
+        <div><CalendarIcon /><strong>{latestCertificationYear}</strong><span>Latest Certification</span></div>
         <div><ShieldIcon /><strong>100%</strong><span>Verified Credentials</span></div>
       </div>
 
@@ -166,7 +157,7 @@ const Certifications = () => {
         {certifications.map((certificate) => (
           <article className="cert-card" key={certificate.title}>
             <div className="cert-image">
-              <img src={certificate.image} alt={`${certificate.title} certificate`} />
+              <img src={resolveImage(certificate)} alt={`${certificate.title} certificate`} />
             </div>
             <div className="cert-content">
               <h3>{certificate.title}</h3>
@@ -183,7 +174,7 @@ const Certifications = () => {
                 <button type="button" onClick={() => openCertificate(certificate)}>
                   <EyeIcon /> View Certificate
                 </button>
-                <a href={certificate.image} target="_blank" rel="noreferrer" aria-label={`Open ${certificate.title}`}>
+                <a href={resolveImage(certificate)} target="_blank" rel="noreferrer" aria-label={`Open ${certificate.title}`}>
                   ↗
                 </a>
               </div>

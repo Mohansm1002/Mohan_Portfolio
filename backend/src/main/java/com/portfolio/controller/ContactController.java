@@ -1,32 +1,23 @@
 package com.portfolio.controller;
 
-import com.portfolio.model.ContactMessage;
-import com.portfolio.repository.ContactMessageRepository;
+import com.portfolio.entity.ContactMessage;
+import com.portfolio.service.ContactMessageService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/contact")
-@CrossOrigin(origins = "http://localhost:5173") // Vite dev server default port
 public class ContactController {
 
-    private final ContactMessageRepository repository;
+    private final ContactMessageService contactMessageService;
 
-    public ContactController(ContactMessageRepository repository) {
-        this.repository = repository;
+    public ContactController(ContactMessageService contactMessageService) {
+        this.contactMessageService = contactMessageService;
     }
 
     @PostMapping
     public ResponseEntity<ContactMessage> submitContact(@Valid @RequestBody ContactMessage message) {
-        ContactMessage saved = repository.save(message);
-        return ResponseEntity.ok(saved);
-    }
-
-    @GetMapping
-    public List<ContactMessage> getAllMessages() {
-        return repository.findAll();
+        return ResponseEntity.ok(contactMessageService.save(message));
     }
 }

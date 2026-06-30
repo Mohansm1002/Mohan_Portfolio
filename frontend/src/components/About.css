@@ -1,12 +1,13 @@
 .about-section {
   width: 100%;
   max-width: none;
-  min-height: auto;
+  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-columns: minmax(300px, 0.8fr) minmax(360px, 1fr);
   align-items: center;
   gap: clamp(1.75rem, 4vw, 3.5rem);
-  padding: 4.5rem clamp(1.25rem, 4vw, 3.5rem) 2.5rem;
+  padding: clamp(5rem, 9vh, 6.5rem) clamp(1.25rem, 4vw, 3.5rem) clamp(2rem, 4vh, 3rem);
   overflow: hidden;
   position: relative;
   background:
@@ -154,8 +155,8 @@
   .about-section {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 2.2rem;
-    padding: 5.5rem clamp(1.25rem, 6vw, 3rem) 2.5rem;
+    gap: clamp(1.8rem, 4vh, 2.2rem);
+    padding: clamp(5rem, 9vh, 6rem) clamp(1.25rem, 6vw, 3rem) clamp(2rem, 4vh, 2.5rem);
   }
 
   .about-content {
@@ -169,8 +170,10 @@
 
 @media (max-width: 560px) {
   .about-section {
-    gap: 2rem;
-    padding: 4.75rem 1rem 2.5rem;
+    gap: clamp(1.5rem, 4vh, 2rem);
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: clamp(4.6rem, 8vh, 5.5rem) 1rem clamp(1.8rem, 4vh, 2.5rem);
   }
 
   .about-orbit {
