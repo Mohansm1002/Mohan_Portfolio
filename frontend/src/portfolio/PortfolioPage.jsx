@@ -60,6 +60,7 @@ function PortfolioPage() {
     return () => observer.disconnect();
   }, []);
 
+
   useEffect(() => {
     const updateScrollProgress = () => {
       const pageHeight = document.documentElement.scrollHeight - window.innerHeight;

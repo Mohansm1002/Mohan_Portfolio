@@ -111,6 +111,10 @@ const Skills = () => {
       }
     };
 
+    if (section.classList.contains('is-visible')) {
+      revealSkills();
+    }
+
     const checkCurrentPosition = () => {
       const rect = section.getBoundingClientRect();
 
@@ -127,14 +131,23 @@ const Skills = () => {
           revealSkills();
         }
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.28 }
+      { rootMargin: '0px 0px 1% 0px', threshold: 0.05 }
     );
 
     observer.observe(section);
 
+    const mutationObserver = new MutationObserver(() => {
+      if (section.classList.contains('is-visible')) {
+        revealSkills();
+      }
+    });
+
+    mutationObserver.observe(section, { attributes: true, attributeFilter: ['class'] });
+
     return () => {
       cancelAnimationFrame(visibilityFrame);
       observer.disconnect();
+      mutationObserver.disconnect();
     };
   }, []);
 
