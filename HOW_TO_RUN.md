@@ -7,36 +7,32 @@ Install these first:
 - Java 17 or newer
 - Maven
 - Node.js and npm
-- MySQL Server
+- Neon PostgreSQL database
 
 ## 2. Set Up the Database
 
-1. Start MySQL Server.
-2. Open MySQL Workbench, phpMyAdmin, or a MySQL terminal.
-3. Run this file:
+The backend is configured to use a Neon PostgreSQL database.
 
-```sql
-backend/database_setup.sql
-```
-
-The project uses this database name:
+Database name:
 
 ```text
-portfolio_mo
+neondb
 ```
 
-If your MySQL username or password is different, update this file:
+Connection settings are in:
 
 ```text
 backend/src/main/resources/application.properties
 ```
 
-Default database settings:
+Current database settings:
 
 ```properties
-spring.datasource.username=root
-spring.datasource.password=password
+spring.datasource.url=jdbc:postgresql://ep-misty-bread-att5tuu9.c-9.us-east-1.aws.neon.tech/neondb?sslmode=require
+spring.datasource.username=neondb_owner
 ```
+
+Spring Boot creates and updates the tables automatically through JPA when the backend starts.
 
 ## 3. Run the Backend
 
@@ -107,7 +103,7 @@ frontend/dist
 
 ## 6. Common Fixes
 
-If the backend cannot connect to MySQL, check the username and password in `backend/src/main/resources/application.properties`.
+If the backend cannot connect to Neon, check the Neon URL, username, password, and internet connection in `backend/src/main/resources/application.properties`.
 
 If the frontend cannot load backend data, confirm the backend is running at `http://localhost:8080`.
 
