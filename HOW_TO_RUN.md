@@ -46,7 +46,7 @@ mvn spring-boot:run
 The backend runs here:
 
 ```text
-http://localhost:8080
+https://mohan-portfolio-pcwx.onrender.com
 ```
 
 The backend automatically creates the tables and seeds default data.
@@ -105,6 +105,6 @@ frontend/dist
 
 If the backend cannot connect to Neon, check the Neon URL, username, password, and internet connection in `backend/src/main/resources/application.properties`.
 
-If the frontend cannot load backend data, confirm the backend is running at `http://localhost:8080`.
+If the frontend cannot load backend data, confirm the backend is running at `https://mohan-portfolio-pcwx.onrender.com`.
 
 If Vite starts on a different port, use the URL shown in the terminal.
